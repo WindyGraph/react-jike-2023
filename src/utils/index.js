@@ -2,5 +2,6 @@
 // import { request } from '@/utils'
 
 import { request } from './request'
+import { getToken, removeToken, setToken } from './token'
 
-export { request }
+export { request, getToken, removeToken, setToken }
