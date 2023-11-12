@@ -3,6 +3,7 @@ import axios from 'axios'
 // 1. 根域名配置
 // 2. 超时事件
 // 3. 请求拦截器 / 响应拦截器
+import { getToken } from './token'
 
 const request = axios.create({
   baseURL: 'http://geek.itheima.net/v1_0',
@@ -13,6 +14,10 @@ const request = axios.create({
 // 在请求发送之前 做拦截 插入一些自定义的配置 [参数的处理]
 request.interceptors.request.use(
   (config) => {
+    const token = getToken()
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
     return config
   },
   (error) => {
