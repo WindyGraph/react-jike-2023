@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   Card,
   Breadcrumb,
@@ -24,6 +24,7 @@ const { Option } = Select
 const { RangePicker } = DatePicker
 
 const Article = () => {
+  const navigate = useNavigate()
   const { channelList } = useChannel()
 
   const status = {
@@ -85,6 +86,7 @@ const Article = () => {
               type='primary'
               shape='circle'
               icon={<EditOutlined />}
+              onClick={() => navigate(`/publish?id=${data.id}`)}
             />
             <Popconfirm
               title='删除文章'
