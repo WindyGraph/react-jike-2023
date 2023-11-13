@@ -1,18 +1,36 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Card, Breadcrumb, Form, Button, Radio, DatePicker, Select } from 'antd'
+import {
+  Card,
+  Breadcrumb,
+  Form,
+  Button,
+  Radio,
+  DatePicker,
+  Select,
+  Table,
+  Tag,
+  Space,
+} from 'antd'
 import locale from 'antd/es/date-picker/locale/zh_CN'
-
-// 导入资源
-import { Table, Tag, Space } from 'antd'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
+
 import img404 from '@/assets/error.png'
 import { useChannel } from '@/hooks/useChannel'
+import { getArticleListAPI } from '@/apis/article'
 
 const { Option } = Select
 const { RangePicker } = DatePicker
 
 const Article = () => {
   const { channelList } = useChannel()
+
+  const status = {
+    0: <Tag color='default'>草稿</Tag>,
+    1: <Tag color='warning'>待审核</Tag>,
+    2: <Tag color='green'>审核通过</Tag>,
+    3: <Tag color='red'>审核失败</Tag>,
+  }
 
   // 准备列数据
   const columns = [
@@ -39,7 +57,7 @@ const Article = () => {
     {
       title: '状态',
       dataIndex: 'status',
-      render: (data) => <Tag color='green'>审核通过</Tag>,
+      render: (data) => status[data],
     },
     {
       title: '发布时间',
@@ -93,6 +111,18 @@ const Article = () => {
       title: 'wkwebview离线化加载h5资源解决方案',
     },
   ]
+
+  const [list, setList] = useState([])
+  const [count, setCount] = useState(0)
+  useEffect(() => {
+    async function getList() {
+      const res = await getArticleListAPI()
+      setList(res.data.results)
+      setCount(res.data.total_count)
+    }
+    getList()
+  }, [])
+
   return (
     <div>
       <Card
@@ -156,11 +186,11 @@ const Article = () => {
           </Form.Item>
         </Form>
       </Card>
-      <Card title={`根据筛选条件共查询到 count 条结果：`}>
+      <Card title={`根据筛选条件共查询到 ${count} 条结果：`}>
         <Table
           rowKey='id'
           columns={columns}
-          dataSource={data}
+          dataSource={list}
         />
       </Card>
     </div>
