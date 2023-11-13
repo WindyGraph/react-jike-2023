@@ -47,9 +47,14 @@ const Publish = () => {
   }
 
   const [imageList, setImageList] = useState([])
-  const onChange = (value) => {
+  const onUploadChange = (value) => {
     console.log('正在上传中')
     setImageList(value.fileList)
+  }
+
+  const [imageType, setImageType] = useState(0)
+  const onTypeChange = (e) => {
+    setImageType(e.target.value)
   }
 
   return (
@@ -67,7 +72,7 @@ const Publish = () => {
         <Form
           labelCol={{ span: 4 }}
           wrapperCol={{ span: 16 }}
-          initialValues={{ type: 1 }}
+          initialValues={{ type: imageType }}
           onFinish={onFinish}
         >
           <Form.Item
@@ -101,23 +106,25 @@ const Publish = () => {
           </Form.Item>
           <Form.Item label='封面'>
             <Form.Item name='type'>
-              <Radio.Group>
+              <Radio.Group onChange={onTypeChange}>
                 <Radio value={1}>单图</Radio>
                 <Radio value={3}>三图</Radio>
                 <Radio value={0}>无图</Radio>
               </Radio.Group>
             </Form.Item>
-            <Upload
-              name='image'
-              listType='picture-card'
-              showUploadList
-              action={'http://geek.itheima.net/v1_0/upload'}
-              onChange={onChange}
-            >
-              <div style={{ marginTop: 8 }}>
-                <PlusOutlined />
-              </div>
-            </Upload>
+            {imageType > 0 && (
+              <Upload
+                name='image'
+                listType='picture-card'
+                showUploadList
+                action={'http://geek.itheima.net/v1_0/upload'}
+                onChange={onUploadChange}
+              >
+                <div style={{ marginTop: 8 }}>
+                  <PlusOutlined />
+                </div>
+              </Upload>
+            )}
           </Form.Item>
           <Form.Item
             label='内容'
