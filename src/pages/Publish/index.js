@@ -9,6 +9,7 @@ import {
   Upload,
   Space,
   Select,
+  message,
 } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
@@ -32,14 +33,15 @@ const Publish = () => {
   }, [])
 
   const onFinish = async (values) => {
-    console.log(values)
+    if (imageType !== imageList.length)
+      return message.warning('封面类型和图片数量不匹配')
     const { title, content, channel_id } = values
     const reqData = {
       title,
       content,
       cover: {
-        type: 0,
-        images: [],
+        type: imageType,
+        images: imageList.map((item) => item.response.data.url),
       },
       channel_id,
     }
@@ -48,7 +50,6 @@ const Publish = () => {
 
   const [imageList, setImageList] = useState([])
   const onUploadChange = (value) => {
-    console.log('正在上传中')
     setImageList(value.fileList)
   }
 
