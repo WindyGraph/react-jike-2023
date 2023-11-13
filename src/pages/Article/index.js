@@ -11,13 +11,14 @@ import {
   Table,
   Tag,
   Space,
+  Popconfirm,
 } from 'antd'
-import locale from 'antd/es/date-picker/locale/zh_CN'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import locale from 'antd/es/date-picker/locale/zh_CN'
 
 import img404 from '@/assets/error.png'
 import { useChannel } from '@/hooks/useChannel'
-import { getArticleListAPI } from '@/apis/article'
+import { delArticleAPI, getArticleListAPI } from '@/apis/article'
 
 const { Option } = Select
 const { RangePicker } = DatePicker
@@ -85,12 +86,20 @@ const Article = () => {
               shape='circle'
               icon={<EditOutlined />}
             />
-            <Button
-              type='primary'
-              danger
-              shape='circle'
-              icon={<DeleteOutlined />}
-            />
+            <Popconfirm
+              title='删除文章'
+              description='确认要删除当前文章吗？'
+              onConfirm={() => onConfirm(data)}
+              okText='确认'
+              cancelText='取消'
+            >
+              <Button
+                type='primary'
+                danger
+                shape='circle'
+                icon={<DeleteOutlined />}
+              />
+            </Popconfirm>
           </Space>
         )
       },
@@ -131,6 +140,13 @@ const Article = () => {
     setReqData({
       ...reqData,
       page,
+    })
+  }
+
+  const onConfirm = async (data) => {
+    await delArticleAPI(data.id)
+    setReqData({
+      ...reqData,
     })
   }
 
