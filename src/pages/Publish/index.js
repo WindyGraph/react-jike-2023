@@ -76,7 +76,9 @@ const Publish = () => {
       setImageType(cover.type)
       setImageList(cover.images.map((url) => ({ url })))
     }
-    articleId && getArticleDetail()
+    if (articleId) {
+      getArticleDetail()
+    }
   }, [articleId, form])
 
   return (
