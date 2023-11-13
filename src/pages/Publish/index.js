@@ -57,8 +57,14 @@ const Publish = () => {
   useEffect(() => {
     async function getArticleDetail() {
       const res = await getArticleByIdAPI(articleId)
-      console.log(res)
-      form.setFieldsValue(res.data)
+      const data = res.data
+      const { cover } = data
+      form.setFieldsValue({
+        ...data,
+        type: cover.type,
+      })
+      setImageType(cover.type)
+      setImageList(cover.images.map((url) => ({ url })))
     }
     getArticleDetail()
   }, [articleId, form])
@@ -127,6 +133,7 @@ const Publish = () => {
                 action={'http://geek.itheima.net/v1_0/upload'}
                 onChange={onUploadChange}
                 maxCount={imageType}
+                fileList={imageList}
               >
                 <div style={{ marginTop: 8 }}>
                   <PlusOutlined />
