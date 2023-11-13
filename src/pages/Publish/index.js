@@ -17,7 +17,11 @@ import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 
 import './index.scss'
-import { createArticleAPI, getArticleByIdAPI } from '@/apis/article'
+import {
+  createArticleAPI,
+  getArticleByIdAPI,
+  updateArticleAPI,
+} from '@/apis/article'
 import { useChannel } from '@/hooks/useChannel'
 
 const { Option } = Select
@@ -34,11 +38,17 @@ const Publish = () => {
       content,
       cover: {
         type: imageType,
-        images: imageList.map((item) => item.response.data.url),
+        images: imageList.map((item) =>
+          item.response ? item.response.data.url : item.url
+        ),
       },
       channel_id,
     }
-    createArticleAPI(reqData)
+    if (articleId) {
+      updateArticleAPI({ ...reqData, id: articleId })
+    } else {
+      createArticleAPI(reqData)
+    }
   }
 
   const [imageList, setImageList] = useState([])
