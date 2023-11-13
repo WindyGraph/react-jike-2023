@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
   Card,
   Breadcrumb,
@@ -17,20 +17,13 @@ import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 
 import './index.scss'
-import { createArticleAPI, getChannelAPI } from '@/apis/article'
+import { createArticleAPI } from '@/apis/article'
+import { useChannel } from '@/hooks/useChannel'
 
 const { Option } = Select
 
 const Publish = () => {
-  const [channelList, setChannelList] = useState([])
-
-  useEffect(() => {
-    const getChannelList = async () => {
-      const res = await getChannelAPI()
-      setChannelList(res.data.channels)
-    }
-    getChannelList()
-  }, [])
+  const { channelList } = useChannel()
 
   const onFinish = async (values) => {
     if (imageType !== imageList.length)
