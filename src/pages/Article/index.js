@@ -103,7 +103,7 @@ const Article = () => {
     begin_pubdate: '',
     end_pubdate: '',
     page: 1,
-    per_page: 4,
+    per_page: 10,
   })
 
   const [list, setList] = useState([])
@@ -124,6 +124,13 @@ const Article = () => {
       channel_id: values.channel_id,
       begin_pubdate: values.date[0].format('YYYY-MM-DD'),
       end_pubdate: values.date[1].format('YYYY-MM-DD'),
+    })
+  }
+
+  const onPageChange = (page) => {
+    setReqData({
+      ...reqData,
+      page,
     })
   }
 
@@ -198,6 +205,11 @@ const Article = () => {
           rowKey='id'
           columns={columns}
           dataSource={list}
+          pagination={{
+            total: count,
+            pageSize: reqData.per_page,
+            onChange: onPageChange,
+          }}
         />
       </Card>
     </div>
