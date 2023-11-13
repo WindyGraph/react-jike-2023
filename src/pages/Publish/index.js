@@ -66,7 +66,7 @@ const Publish = () => {
       setImageType(cover.type)
       setImageList(cover.images.map((url) => ({ url })))
     }
-    getArticleDetail()
+    articleId && getArticleDetail()
   }, [articleId, form])
 
   return (
@@ -76,7 +76,7 @@ const Publish = () => {
           <Breadcrumb
             items={[
               { title: <Link to={'/'}>首页</Link> },
-              { title: '发布文章' },
+              { title: `${articleId ? '编辑' : '发布'}文章` },
             ]}
           />
         }
